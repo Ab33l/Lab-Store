@@ -1,8 +1,8 @@
 const express = require('express');
-const body_parser = require('body-parser');
+const bodyParser = require('body-parser');
 const app = express();
 const request = require('request');
-app.use(body_parser.json());
+app.use(bodyParser.json());
 
 //routes
 app.get('/', (req, res) =>{
@@ -10,25 +10,57 @@ app.get('/', (req, res) =>{
 });
 
 //Get Access Token
-app.get('/access_token', (req, res) => {
-    let url = "";
-    let auth = new Buffer().toString('base64');
+app.get('/access_token', access, (req, res) => {
+    res.status(200).json({access_token: req.access_token})
+});
+
+//Register URLs
+app.get('/register', access, (req,res) => {
+    let url = "https://sandbox.safaricom.co.ke/mpesa/c2b/v1/registerurl";
+    let auth = "Bearer " + req.access_token
 
     request({
-        url: "",
+        url:url,
+        method:"POST",
+        headers:{
+            "Authorization": auth
+        },
+        json: {
+            "ShortCode": "601426",
+            "ResponseType":"Completed",
+            "ConfirmationURL":"ConfirmationURL",
+            "ValidationURL":"ValidaitonURL"
+        }
+    },
+    function(err,body,response){
+        if(err){
+            console.log(err);
+        }
+        res.status(200).json(body)
+    }
+    )
+})
+
+function access(req, res, next){
+    let url = 'https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials';
+    let auth = new Buffer('ConsumerKey:ConsumerSecret').toString('base64');
+
+    request({
+        url: url,
         headers: {
-            "Authorization": "Basic " + auth
+            'Authorization': 'Basic ' + auth
         }
        },
-        (error, response, body) => {
+        (err, response, body) => {
             if(err){
-                console.log(error)
+                console.log(error);
             }else{
-                res.status(200).json(body);
+                req.access_token = JSON.parse(body).access_token
+                next()
             }
         }
     )
-});
+}
 
 //listen
 app.listen(5000, (err, live) =>{
