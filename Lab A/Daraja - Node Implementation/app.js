@@ -26,10 +26,10 @@ app.get('/register', access, (req,res) => {
             "Authorization": auth
         },
         json: {
-            "ShortCode": "601426",
+            "ShortCode": "600989",
             "ResponseType":"Completed",
-            "ConfirmationURL":"ConfirmationURL",
-            "ValidationURL":"ValidaitonURL"
+            "ConfirmationURL":"http://IP_Address:Port/confirmation",
+            "ValidationURL":"http://IP_Address:Port/validation"
         }
     },
     function(err,body,response){
@@ -43,7 +43,7 @@ app.get('/register', access, (req,res) => {
 
 function access(req, res, next){
     let url = 'https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials';
-    let auth = new Buffer('ConsumerKey:ConsumerSecret').toString('base64');
+    let auth = new Buffer('Consumer_Secret:Consumer_Key').toString('base64');
 
     request({
         url: url,
