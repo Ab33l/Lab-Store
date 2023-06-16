@@ -26,7 +26,7 @@ app.get('/register', access, (req,res) => {
             "Authorization": auth
         },
         json: {
-            "ShortCode": "600989",
+            "ShortCode": "ShortCode",
             "ResponseType":"Completed",
             "ConfirmationURL":"http://IP_Address:Port/confirmation",
             "ValidationURL":"http://IP_Address:Port/validation"
@@ -37,6 +37,47 @@ app.get('/register', access, (req,res) => {
             console.log(err);
         }
         res.status(200).json(body)
+    }
+    )
+})
+
+
+
+app.post('/confirmation', (req, res) =>{
+    console.log('......confirmation-----');
+    console.log(req.body)
+})
+
+app.post('/validation', (req, res) =>{
+    console.log('......validation-----');
+    console.log(req.body)
+})
+
+
+app.get('/simulate', access, (req,res) => {
+    let url = "https://sandbox.safaricom.co.ke/mpesa/c2b/v1/simulate";
+    let auth = 'Bearer ' + req.access_token
+
+    request({
+        url:url,
+        method:"POST",
+        headers:{
+            'Authorization': auth 
+        },
+        json: {
+            'ShortCode': 'ShortCode',
+            'CommandID': 'CustomerPayBillOnline',
+            'Amount': '100',
+            'Msisdn': '254708374149',
+            'BillRefNumber': 'PaybillOnlineHeretoo'
+        }
+    },
+    function(err,response,body){
+        if(err){
+            console.log(err)
+        }else{
+            res.status(200).json(body)
+        }
     }
     )
 })
