@@ -2,11 +2,21 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
 const request = require('request');
+const os = require('os');
 app.use(bodyParser.json());
+
+
+function getLocalTime() {
+    const now = new Date();
+    return now.toLocaleTimeString();
+}
 
 //routes
 app.get('/', (req, res) =>{
-    res.send('App Set up Complete');
+    const localTime = getLocalTime();
+    //req.send('App Set up Complete');
+    res.send('Your local time is ' + localTime);
+
 });
 
 //Get Access Token
@@ -102,6 +112,41 @@ function access(req, res, next){
         }
     )
 }
+
+//get balance 
+app.get('/balance', access, (res,req) =>{
+    let endpoint = 'https://sandbox.safaricom.co.ke/mpesa/accountbalance/v1/query';
+    let auth = 'Bearer ' + req.access
+
+    request({
+        url:endpoint,
+        method:'POST',
+        headers: {
+            'Authorization': auth
+        },
+        json:{
+            "Initiator": "testapi",
+            "SecurityCredential": "",
+            "CommandID": "AccountBalance",
+            "PartyA": '600984',
+            "IdentifierType": '4',
+            "Remarks": "Remarks",
+            'QueueTimeoutURL': 'http://IP_Address:Port/AccountBalance/queue',
+            'ResultURL': 'http://IP_Address:Port/AccountBalance/result'
+        }
+    }
+    )
+})
+
+app.post('/AccountBalance/queue', (req, res) =>{
+    console.log('......Balance Timeout Response-----');
+    console.log(req.body)
+})
+
+app.post('/AccountBalance/result', (req, res) =>{
+    console.log('......Balance Request Response-----');
+    console.log(req.body)
+})
 
 //listen
 app.listen(5000, (err, live) =>{
