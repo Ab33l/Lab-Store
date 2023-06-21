@@ -1,0 +1,18 @@
+{
+  "name": "cybersource",
+  "version": "1.0.0",
+  "description": "cybersource demo",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cybersource-rest-client": "0.0.47",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "jwk-to-pem": "^2.0.5",
+    "nodemon": "^2.0.22"
+  }
+}
