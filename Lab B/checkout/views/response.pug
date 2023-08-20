@@ -1,0 +1,20 @@
+doctype html
+html
+  head
+    title Payment Result
+    link(rel='stylesheet', href='https://cdn.jsdelivr.net/npm/sweetalert2@11.0.10/dist/sweetalert2.min.css')
+  body
+    h1 Payment Result:
+    script(src='https://cdn.jsdelivr.net/npm/sweetalert2@11.0.10/dist/sweetalert2.all.min.js')
+    script.
+      document.addEventListener('DOMContentLoaded', () => {
+        const success = "#{success}";
+        const error = "#{error}";
+
+        if (success) {
+          Swal.fire('Payment Success', 'Loan Payment processed successfully!', 'success');
+        } else {
+          Swal.fire('Payment Error', `Error processing loan payment: ${error}`, 'error');
+        }
+      });
+      
