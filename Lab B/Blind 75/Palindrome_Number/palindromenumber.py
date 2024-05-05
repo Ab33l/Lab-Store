@@ -1,8 +1,8 @@
-Input: x = 121
-Output: True, 121 = 121
+#Input: x = 121
+#Output: True, 121 = 121
 
-Input: x = -121
-Output: False, 121- != 121
+#Input: x = -121
+#Output: False, 121- != 121
 
 class Solution:
     def isPalindrome(self, x: int) -> bool:
